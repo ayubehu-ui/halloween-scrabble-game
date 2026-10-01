@@ -1,46 +1,614 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f28c28"><title>Halloween Scrabble Challenge</title>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Halloween Game Day | Cross Border × IT</title>
+
 <style>
-:root{--o:#f28c28;--ink:#242424;--muted:#777;--paper:#faf8f3;--line:#e9e5dd}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
-main{max-width:720px;margin:auto;padding:24px 15px 40px}.hero{text-align:center;padding:18px 8px 25px}
-.eyebrow{color:#b85d0b;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
-h1{font-size:clamp(32px,8vw,48px);line-height:1.04;letter-spacing:-1.3px;margin:10px 0}.sub{color:var(--muted);font-size:15px;line-height:1.5}
-.card{background:white;border:1px solid var(--line);border-radius:18px;padding:21px;margin:0 0 16px;box-shadow:0 5px 18px #24190a08}
-h2{font-size:19px;margin:0 0 17px}label{display:block;font-size:13px;font-weight:700;margin:0 0 7px}.field{margin-bottom:16px}
-input{width:100%;min-height:50px;border:1px solid #d9d5cc;border-radius:11px;padding:12px;font-size:17px;background:white;color:var(--ink)}
-input:focus{outline:3px solid #f28c2830;border-color:var(--o)}#word{text-transform:uppercase;letter-spacing:2px;font-weight:700;font-size:21px}
-.scorebox{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff6e9;border:1px solid #f7ddba;border-radius:13px;padding:15px;margin:15px 0}
-.smallcap{font-size:11px;color:#80501e;font-weight:700;letter-spacing:1px}.score{font-size:35px;font-weight:800;color:#d96b12;margin-top:4px}.count{font-size:12px;color:#80501e;text-align:right}
-button{font:inherit;cursor:pointer}.submit{width:100%;min-height:52px;border:0;border-radius:11px;background:var(--o);font-weight:800;color:#24170a;font-size:16px}.submit:disabled{opacity:.55}
-.status{min-height:20px;text-align:center;font-size:13px;margin-top:12px;line-height:1.4}.error{color:#b42318}.success{color:#287a4b}
-.tiles{display:flex;flex-wrap:wrap;gap:7px}.tile{width:39px;height:45px;border-radius:7px;background:#fff3d9;border:1px solid #e6d6b8;box-shadow:0 2px 0 #e6d6b8;display:grid;place-items:center;position:relative;font-size:20px;font-weight:800}.tile small{position:absolute;right:4px;bottom:2px;font-size:9px}
-.note{font-size:12px;color:var(--muted);line-height:1.5;margin:12px 0 0}.lbhead{display:flex;justify-content:space-between;align-items:center;gap:10px}.lbhead h2{margin:0}.refresh{border:1px solid var(--line);background:white;border-radius:8px;padding:8px 10px;font-size:12px;font-weight:700}
-.entry{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #f0eee9}.entry:last-child{border:0}.rank{width:28px;height:28px;border-radius:8px;background:#f4f1eb;display:grid;place-items:center;font-size:12px;font-weight:800}.entry:first-child .rank{background:#ffe5b8}.pname{font-weight:700;overflow-wrap:anywhere}.pts{font-weight:800;white-space:nowrap}.empty{text-align:center;color:var(--muted);padding:22px 0;font-size:14px}
-footer{text-align:center;color:var(--muted);font-size:11px;line-height:1.6;padding:10px}
-</style></head><body><main>
-<header class="hero"><div class="eyebrow">Cross Border × IT</div><h1>Halloween<br>Scrabble Challenge</h1><p class="sub">Build a word from the available tiles, submit your score, and climb the leaderboard.</p></header>
-<section class="card"><h2>Submit Your Word</h2>
-<div class="field"><label for="name">Participant Name</label><input id="name" maxlength="60" placeholder="Enter your name" autocomplete="name"></div>
-<div class="field"><label for="word">Word Created</label><input id="word" maxlength="13" placeholder="TYPE YOUR WORD" autocomplete="off" autocapitalize="characters"></div>
-<div class="scorebox"><div><div class="smallcap">Live Word Score</div><div class="score" id="score">0 pts</div></div><div class="count" id="count">0 / 13 tiles</div></div>
-<button class="submit" id="submit">Submit Word</button><div class="status" id="status" aria-live="polite"></div></section>
-<section class="card"><h2>Available Letter Tiles</h2><div class="tiles" id="tiles"></div><p class="note">Only displayed letters and quantities are allowed. Scores use standard Scrabble letter values.</p></section>
-<section class="card"><div class="lbhead"><h2>Leaderboard</h2><button class="refresh" id="refresh">Refresh</button></div><div id="board"><div class="empty">Loading leaderboard...</div></div></section>
-<footer>Cross Border × IT Halloween Game Day<br>Points accumulate across valid submissions.</footer></main>
+:root {
+  --orange: #F28C28;
+  --deep-orange: #B95313;
+  --cream: #FFF8EF;
+  --dark: #292521;
+  --muted: #716A62;
+  --border: #EADFD1;
+  --white: #FFFFFF;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #FFFAF3, #FFF1DF);
+  color: var(--dark);
+}
+
+.container {
+  max-width: 1120px;
+  margin: auto;
+  padding: 24px 18px 48px;
+}
+
+/* CENTERED EVENT BANNER */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #F2DFC8;
+  border-radius: 28px;
+  background:
+    radial-gradient(ellipse at 82% 15%, #FFE0B6 0, transparent 36%),
+    linear-gradient(115deg, #FFFDF9, #FFF3E2);
+  padding: clamp(35px, 7vw, 75px) 18px;
+  text-align: center;
+  box-shadow: 0 16px 45px #8C55121A;
+}
+
+.eyebrow {
+  color: var(--deep-orange);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 18px 0 14px;
+  font-size: clamp(38px, 8vw, 76px);
+  line-height: 1;
+  letter-spacing: -.055em;
+}
+
+h1 span {
+  color: var(--orange);
+}
+
+.tagline {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .22em;
+  color: #6D6257;
+}
+
+.decor {
+  margin-top: 25px;
+  font-size: clamp(26px, 5vw, 42px);
+  letter-spacing: .3em;
+}
+
+.intro {
+  text-align: center;
+  max-width: 620px;
+  margin: 22px auto 28px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, .8fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 8px 28px #59340D0A;
+}
+
+h2 {
+  font-size: 21px;
+  margin: 0 0 18px;
+}
+
+label {
+  display: block;
+  margin: 14px 0 7px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid #D9CBB9;
+  border-radius: 12px;
+  background: #FFFDF9;
+  padding: 12px 14px;
+  font-size: 16px;
+  color: var(--dark);
+}
+
+button {
+  width: 100%;
+  margin-top: 16px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--orange);
+  color: #21170E;
+  font-weight: 800;
+  font-size: 16px;
+  padding: 15px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+
+.score {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #FFF4E5;
+  border: 1px solid #F4DFC4;
+  border-radius: 13px;
+  padding: 13px 15px;
+  margin-top: 14px;
+}
+
+.score strong {
+  font-size: 24px;
+  color: var(--deep-orange);
+}
+
+.status {
+  min-height: 24px;
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.status.error {
+  color: #A52C20;
+}
+
+.status.success {
+  color: #267344;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 12px 6px;
+  border-bottom: 1px solid #F0E8DE;
+  font-size: 14px;
+}
+
+th {
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+td:last-child,
+th:last-child {
+  text-align: right;
+  font-weight: 800;
+}
+
+.rank {
+  color: var(--deep-orange);
+  font-weight: 800;
+}
+
+.note {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: 16px;
+}
+
+@media (max-width: 760px) {
+  .container {
+    padding: 12px 12px 32px;
+  }
+
+  .hero {
+    border-radius: 20px;
+  }
+
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .decor {
+    letter-spacing: .15em;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+<header class="hero">
+  <div class="eyebrow">Cross Border × IT</div>
+
+  <h1>
+    Halloween <span>Game Day.</span>
+  </h1>
+
+  <div class="tagline">
+    PLAY • COMPETE • CONNECT
+  </div>
+
+  <div class="decor" aria-hidden="true">
+    🎲　♟　🟠
+  </div>
+</header>
+
+<p class="intro">
+  Choose a word from the approved game list, submit your entry,
+  and watch the leaderboard update.
+</p>
+
+<section class="layout">
+
+<div class="panel">
+
+<h2>Submit Your Word</h2>
+
+<form id="entryForm">
+
+<label for="participant">
+  Participant Name
+</label>
+
+<input
+  id="participant"
+  maxlength="60"
+  autocomplete="name"
+  placeholder="Enter your name"
+  required
+>
+
+<label for="word">
+  Select Approved Word
+</label>
+
+<select id="word" required>
+  <option value="">Choose a word</option>
+</select>
+
+<div class="score">
+  <span>Word Points</span>
+  <strong id="points">0</strong>
+</div>
+
+<button id="submitBtn" type="submit">
+  Submit Entry
+</button>
+
+</form>
+
+<p id="status" class="status" role="status"></p>
+
+<p class="note">
+  Only approved words are accepted. Points are added to your
+  cumulative participant score.
+</p>
+
+</div>
+
+<div class="panel">
+
+<h2>Live Leaderboard</h2>
+
+<table>
+<thead>
+<tr>
+  <th>Rank</th>
+  <th>Participant</th>
+  <th>Points</th>
+</tr>
+</thead>
+
+<tbody id="leaderboard">
+<tr>
+  <td colspan="3">Loading scores...</td>
+</tr>
+</tbody>
+</table>
+
+<p class="note">
+  Scores accumulate across accepted submissions.
+</p>
+
+</div>
+</section>
+</main>
+
 <script>
-const API_URL='PASTE_DEPLOYED_APPS_SCRIPT_EXEC_URL';
-const API_TOKEN='SET_THE_SAME_RANDOM_TOKEN_AS_CODE_GS';
-const inv={S:2,O:1,W:1,H:2,E:1,G:2,K:1,R:1,M:1,V:1};
-const val={A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
-const $=id=>document.getElementById(id),word=()=>$('word').value.toUpperCase().replace(/[^A-Z]/g,'');
-function check(w){let c={};for(const x of w){if(!(x in inv))return `Letter ${x} is not available.`;c[x]=(c[x]||0)+1;if(c[x]>inv[x])return `Too many ${x} tiles. Available: ${inv[x]}.`;}return ''}
-function update(){let w=word(),err=check(w);$('score').textContent=[...w].reduce((s,x)=>s+(val[x]||0),0)+' pts';$('count').textContent=w.length+' / 13 tiles';$('status').textContent=err;$('status').className='status '+(err?'error':'')}
-function draw(){for(const [ch,n] of Object.entries(inv))for(let i=0;i<n;i++){let d=document.createElement('div');d.className='tile';d.textContent=ch;let s=document.createElement('small');s.textContent=val[ch];d.appendChild(s);$('tiles').appendChild(d)}}
-function render(list){let root=$('board');root.replaceChildren();if(!list?.length){root.innerHTML='<div class="empty">No submissions yet. Be the first to play!</div>';return}list.forEach(x=>{let row=document.createElement('div');row.className='entry';let r=document.createElement('div');r.className='rank';r.textContent=x.rank;let n=document.createElement('div');n.className='pname';n.textContent=x.name;let p=document.createElement('div');p.className='pts';p.textContent=x.total+' pts';row.append(r,n,p);root.appendChild(row)})}
-function call(params){return new Promise((resolve,reject)=>{let cb='scrabbleCb'+Date.now()+Math.floor(Math.random()*10000),s=document.createElement('script'),timer=setTimeout(()=>{clean();reject(Error('Game service timed out. Please retry.'))},15000);function clean(){clearTimeout(timer);delete window[cb];s.remove()}window[cb]=d=>{clean();resolve(d)};params.callback=cb;s.src=API_URL+'?'+new URLSearchParams(params);s.onerror=()=>{clean();reject(Error('Could not connect to game service.'))};document.body.appendChild(s)})}
-async function load(){try{let d=await call({action:'leaderboard',token:API_TOKEN});if(!d.ok)throw Error(d.error);render(d.leaderboard)}catch(e){$('board').textContent='Leaderboard unavailable. Please refresh.'}}
-async function submit(){let n=$('name').value.trim(),w=word();if(!n||!w){$('status').textContent='Enter your name and word.';$('status').className='status error';return}let err=check(w);if(err){$('status').textContent=err;$('status').className='status error';return}let b=$('submit');b.disabled=true;b.textContent='Submitting...';try{let d=await call({action:'submit',token:API_TOKEN,name:n,word:w});if(!d.ok)throw Error(d.error);$('status').textContent=`Submitted! ${d.word} earned ${d.points} points.`;$('status').className='status success';$('word').value='';update();render(d.leaderboard)}catch(e){$('status').textContent=e.message;$('status').className='status error'}finally{b.disabled=false;b.textContent='Submit Word'}}
-$('word').addEventListener('input',update);$('word').addEventListener('keydown',e=>{if(e.key==='Enter')submit()});$('submit').addEventListener('click',submit);$('refresh').addEventListener('click',load);draw();update();load();
-</script></body></html>
+
+/* CONNECTION SETTINGS */
+
+const API_URL =
+  'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+
+const API_TOKEN =
+  'HalloweenGameDay2026_ChangeThisToken';
+
+/* APPROVED WORDS */
+
+const WORDS = [
+  'SHOWERS','SMOKERS','SHOVERS',
+
+  'SHOWER','SMOKER','SHOVER','HOMERS',
+  'GROVES','MOVERS','SHREWS','WHOMSO',
+
+  'SMOKE','SHOWS','WHOSE','GROWS',
+  'GROSS','WORKS','MOVES','MOVER',
+  'HOVER','SHOVE','HOMER','HOMES',
+  'MOWER','SOWER','OGRES','GORES',
+  'GROKS','SHREW',
+
+  'HOGS','MOSH','MESH','HERS',
+  'HERO','GEMS','WOKS','VOWS',
+  'OVER','EGOS','KEGS','MOWS','ROWS'
+];
+
+const VALUES = {
+  A:1, B:3, C:3, D:2, E:1,
+  F:4, G:2, H:4, I:1, J:8,
+  K:5, L:1, M:3, N:1, O:1,
+  P:3, Q:10, R:1, S:1, T:1,
+  U:1, V:4, W:4, X:8, Y:4, Z:10
+};
+
+const $ = id => document.getElementById(id);
+
+function pointsFor(word) {
+  return [...word].reduce(
+    (sum, letter) => sum + VALUES[letter],
+    0
+  );
+}
+
+/* BUILD WORD DROPDOWN */
+
+function fillWords() {
+  const lengths = [...new Set(WORDS.map(w => w.length))]
+    .sort((a, b) => b - a);
+
+  lengths.forEach(length => {
+    const group = document.createElement('optgroup');
+    group.label = length + ' Letters';
+
+    WORDS.filter(w => w.length === length).forEach(word => {
+      const option = document.createElement('option');
+
+      option.value = word;
+      option.textContent =
+        word + ' — ' + pointsFor(word) + ' points';
+
+      group.appendChild(option);
+    });
+
+    $('word').appendChild(group);
+  });
+}
+
+/* JSONP REQUEST FOR GOOGLE APPS SCRIPT */
+
+function jsonp(params) {
+  return new Promise((resolve, reject) => {
+    const callbackName =
+      'scrabbleCallback_' +
+      Date.now() +
+      '_' +
+      Math.floor(Math.random() * 100000);
+
+    const script = document.createElement('script');
+
+    const query = new URLSearchParams({
+      ...params,
+      callback: callbackName
+    });
+
+    const timeout = setTimeout(() => {
+      finish(new Error('Server response timed out.'));
+    }, 15000);
+
+    function finish(error, data) {
+      clearTimeout(timeout);
+      delete window[callbackName];
+      script.remove();
+
+      if (error) reject(error);
+      else resolve(data);
+    }
+
+    window[callbackName] = data => {
+      finish(null, data);
+    };
+
+    script.onerror = () => {
+      finish(new Error(
+        'Could not connect to the scoring service. Check the deployment URL and access settings.'
+      ));
+    };
+
+    script.src =
+      API_URL +
+      (API_URL.includes('?') ? '&' : '?') +
+      query.toString();
+
+    document.body.appendChild(script);
+  });
+}
+
+/* LEADERBOARD */
+
+function renderLeaderboard(entries) {
+  const body = $('leaderboard');
+  body.replaceChildren();
+
+  if (!entries || entries.length === 0) {
+    const row = body.insertRow();
+    const cell = row.insertCell();
+
+    cell.colSpan = 3;
+    cell.textContent = 'No entries yet. Be the first to play!';
+
+    return;
+  }
+
+  entries.forEach(entry => {
+    const row = body.insertRow();
+
+    const rank = row.insertCell();
+    rank.className = 'rank';
+    rank.textContent = entry.rank;
+
+    row.insertCell().textContent = entry.name;
+    row.insertCell().textContent = entry.total;
+  });
+}
+
+function setStatus(message, type = '') {
+  const el = $('status');
+
+  el.textContent = message;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+/* LOAD SCORES */
+
+async function refreshLeaderboard() {
+  if (API_URL.includes('PASTE_YOUR_')) return;
+
+  try {
+    const data = await jsonp({
+      token: API_TOKEN,
+      action: 'leaderboard'
+    });
+
+    if (!data.ok) {
+      throw new Error(data.error || 'Unable to load scores.');
+    }
+
+    renderLeaderboard(data.leaderboard);
+
+  } catch (err) {
+    const body = $('leaderboard');
+    body.replaceChildren();
+
+    const row = body.insertRow();
+    const cell = row.insertCell();
+
+    cell.colSpan = 3;
+    cell.textContent = 'Leaderboard unavailable. Check setup.';
+  }
+}
+
+/* UPDATE POINT PREVIEW */
+
+$('word').addEventListener('change', () => {
+  const word = $('word').value;
+
+  $('points').textContent =
+    word ? pointsFor(word) : '0';
+});
+
+/* SUBMIT ENTRY */
+
+$('entryForm').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  const name = $('participant').value.trim();
+  const word = $('word').value;
+
+  if (!name || !word) {
+    setStatus(
+      'Enter your name and select an approved word.',
+      'error'
+    );
+    return;
+  }
+
+  if (API_URL.includes('PASTE_YOUR_')) {
+    setStatus(
+      'The administrator must connect the scoring service.',
+      'error'
+    );
+    return;
+  }
+
+  const button = $('submitBtn');
+
+  button.disabled = true;
+  button.textContent = 'Submitting...';
+
+  setStatus('');
+
+  try {
+    const data = await jsonp({
+      token: API_TOKEN,
+      action: 'submit',
+      name: name,
+      word: word
+    });
+
+    if (!data.ok) {
+      throw new Error(data.error || 'Submission failed.');
+    }
+
+    setStatus(
+      'Entry accepted! ' +
+      data.word +
+      ' earned ' +
+      data.points +
+      ' points.',
+      'success'
+    );
+
+    renderLeaderboard(data.leaderboard);
+
+    $('word').value = '';
+    $('points').textContent = '0';
+
+  } catch (err) {
+    setStatus(
+      err.message || 'Unable to submit. Please try again.',
+      'error'
+    );
+
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Submit Entry';
+  }
+});
+
+/* INITIALIZE */
+
+fillWords();
+refreshLeaderboard();
+
+</script>
+
+</body>
+</html>
